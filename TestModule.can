@@ -1,0 +1,95 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  int ret_val1;
+  int ret_val2;
+  int ret_val3;
+}
+testcase Test_Car_On()
+{
+  ret_val1=testWaitForSysVar(sysvar::CarSwitch::CarSwitch,1500);
+  if(ret_val1==1)
+  {
+    if(@CarSwitch::CarSwitch==1)
+    {
+      testStepPass("CAR is ON");
+    }
+    
+  }
+  else if(ret_val1==0)
+  {
+    testStepFail("CAR is OFF or no reesponse from ECU in given time");
+  }
+  else
+  {
+    testStepWarning("Constrain in Data Access");
+  }
+  
+}
+testcase Test_Ac()
+{
+  ret_val2=testWaitForSysVar(sysvar::AcSwitch::AcSwitch,6000);
+  if(ret_val2==1)
+  {
+    if($WindowOnOFF==1)
+    { 
+      testStepPass("Automatic Window Close Funcitionality is working fine");
+    }
+   }
+  else if(ret_val2==0)
+  {
+    testStepFail("AC is OFF or no response from ECU in given Time");
+    
+  }
+  else
+  {
+  testStepWarning("Constrain in Data Access");
+  }
+}
+
+testcase Test_switch()
+{
+  ret_val3=testWaitForSysVar(sysvar::WindowSwitch::WindowSwitch,3000);
+  if(ret_val3==1)
+  {
+    if($WindowOnOFF==1)
+    { 
+      testStepPass("Switch Funcitionality is working fine");
+    }
+   }
+  else if(ret_val3==0)
+  {
+    testStepFail("Switch is OFF or no response from ECU in given Time");
+    
+  }
+  else
+  {
+  testStepWarning("Constrain in Data Access");
+  }
+}
+
+void MainTest()
+{
+  TestModuleTitle(" Power Window System Test");
+  testModuleDescription(" This Test Modeule calls some test cases ");
+  testModuleDescription("to test some feature of POWER WINDOW SYSTEM");
+  
+   TestReportAddSUTInfo("Serial No.", "A012345BC");
+   TestReportAddSUTInfo("Manufactured", "2020-11-16");
+  
+  TestReportAddSUTInfo("Software Revision No.", "2.7");
+  TestReportAddSUTInfo("Release Date", "2022-11-17");
+  
+   TestReportAddEngineerInfo("Test Engineer", "KAUSTAV GHOSH");
+  
+  Test_Car_On();
+  Test_Ac();
+  Test_switch();
+}
+
+

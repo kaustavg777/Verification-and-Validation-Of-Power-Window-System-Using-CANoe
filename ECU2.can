@@ -1,0 +1,104 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+
+  message WindowStatus WIN_STATUS;
+}
+on start
+ {
+   write("Simulation Started");
+   write("To Switch On the Car Press s");
+  setControlVisibility("PowerWindowPanel","W1",0);
+  setControlVisibility("PowerWindowPanel","W2",0);
+ }
+on key 's'
+ {
+   @CarSwitch::CarSwitch=1;
+   write("Car Switch is ON");
+   write("To close the Window Press w");
+   write("To Open the window Press o");
+   write("To Switch On the AC Press a");
+   write("To Switch Off the AC Press c");
+  
+ 
+  }
+on key 'w'
+{ 
+  @WindowSwitch::WindowSwitch=1;
+ 
+ }
+on key 'o'
+{
+  @WindowSwitch::WindowSwitch=0;
+}
+on key 'a'
+ {
+  @AcSwitch::AcSwitch=1;
+  write("AC is ON");
+ }
+on key 'c'
+ {
+  @AcSwitch::AcSwitch=0;
+  write("AC is OFF");
+ }
+on sysvar WindowSwitch::WindowSwitch
+{
+  if(@WindowSwitch::WindowSwitch==1 && @CarSwitch::CarSwitch==1)
+  { 
+    WIN_STATUS.byte(0)=0x01;
+    output(WIN_STATUS);
+    write("Window Closed");
+    setControlVisibility("PowerWindowPanel","W1",1);
+    setControlVisibility("PowerWindowPanel","W2",0);
+    
+    
+  }
+  else if(@WindowSwitch::WindowSwitch==0||@CarSwitch::CarSwitch==0)
+  {
+    WIN_STATUS.byte(0)=0x00;
+    output(WIN_STATUS);
+    write("Window Opened");
+    setControlVisibility("PowerWindowPanel","W1",0);
+    setControlVisibility("PowerWindowPanel","W2",1);
+    
+  }
+  
+}
+on sysvar AcSwitch::AcSwitch
+{
+  if(@AcSwitch::AcSwitch==1 && @CarSwitch::CarSwitch==1)
+  { 
+    WIN_STATUS.byte(0)=0x01;
+    output(WIN_STATUS);
+    write("Window Closed");
+    setControlVisibility("PowerWindowPanel","W1",1);
+    setControlVisibility("PowerWindowPanel","W2",0);
+  
+    
+    
+  }
+  else if(@AcSwitch::AcSwitch==0 || @CarSwitch::CarSwitch==0)
+  {
+    WIN_STATUS.byte(0)=0x00;
+    output(WIN_STATUS);
+    write("Window Opened");
+    setControlVisibility("PowerWindowPanel","W1",0);
+    setControlVisibility("PowerWindowPanel","W2",1);
+  }
+}
+
+
+on stopMeasurement
+{
+  write("Simulation Stopped");
+    @WindowSwitch::WindowSwitch=0;
+    @AcSwitch::AcSwitch==0;
+ }
+
+
+

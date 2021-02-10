@@ -1,0 +1,29 @@
+/*@!Encoding:1252*/
+includes
+{
+ 
+}
+
+variables
+{
+  message WindowStatus WIN_STATUS;
+  Timer delay;
+}
+  on message WindowStatus
+  {
+    setTimer(delay,2);
+   
+   }
+on timer delay
+  { 
+    if(WIN_STATUS.byte(0)==0x01)
+    {
+    // write("Window Closed");
+    }
+    if(WIN_STATUS.byte(0)==0x00)
+    {
+      //write("Window Opened");
+    }
+  }
+
+
